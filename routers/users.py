@@ -25,9 +25,7 @@ collection = engine.db.get_collection("users")
 async def all_users():
     """returns all users on the platform"""
 
-    data = await db_crud.fetch_all_documents(
-        collection, models.UserData
-    )
+    data = await db_crud.fetch_all_documents(collection, models.UserData)
     return data
 
 
@@ -57,8 +55,6 @@ async def remove_user(
     # check if the email is existing before you delete
     user = await db_crud.fetch_one(collection, email=user_email)
     if not user:
-        raise HTTPException(
-            status_code=400, detail="Invalid credentials"
-        )
+        raise HTTPException(status_code=400, detail="Invalid credentials")
 
     await db_crud.remove_one_document(collection, email=user_email)

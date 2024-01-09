@@ -6,9 +6,10 @@ from pydantic import EmailStr
 
 collection = engine.db.get_collection("users")
 
+
 @router.get(
-        "/generate/emailToken",
-        summary="generates verification email token",
+    "/generate/emailToken",
+    summary="generates verification email token",
 )
 async def verify_user_email(user_email: EmailStr):
     """creates email verification token"""

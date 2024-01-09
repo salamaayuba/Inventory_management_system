@@ -4,7 +4,9 @@ import io, csv
 import pandas as pd
 
 COLUMNS = list(models.Items.model_fields.keys())
-def csv_reader(binary_data:bytes):
+
+
+def csv_reader(binary_data: bytes):
     """file object"""
 
     file_stream = io.StringIO(binary_data.decode())
@@ -25,8 +27,9 @@ def panda_reader(binary_data: bytes, file: UploadFile):
 
         except ValueError as err:
             raise HTTPException(
-                    status_code=status.HTTP_400_BAD_REQUEST,
-                    detail=f"could not find {COLUMNS} in file")
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"could not find {COLUMNS} in file",
+            )
 
     else:
         try:
@@ -34,7 +37,8 @@ def panda_reader(binary_data: bytes, file: UploadFile):
 
         except ValueError:
             raise HTTPException(
-                    status_code=status.HTTP_400_BAD_REQUEST,
-                    detail=f"could not find {COLUMNS} in file")
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"could not find {COLUMNS} in file",
+            )
 
     return df.to_dict(orient="records")

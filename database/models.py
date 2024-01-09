@@ -4,13 +4,6 @@ from datetime import datetime
 from typing import Union
 
 
-class Departments(Enum):
-    meal = "meal"
-    nutrition = "nutrition"
-    agriculture = "agriculture"
-    erms = "erms"
-
-
 class UserData(BaseModel):
     """the response data model for users"""
 
@@ -23,7 +16,7 @@ class UserData(BaseModel):
     class Config:
         json_schema_extra = {
             "example": {
-                "name": "sammy kingx",
+                "name": "salama ayuba",
                 "email": "user@example.com",
                 "mobile_no": "+234704356789021",
                 "role": "admin",
@@ -40,7 +33,7 @@ class Users(UserData, BaseModel):
     class Config:
         json_schema_extra = {
             "example": {
-                "name": "sammy kingx",
+                "name": "salama ayuba",
                 "email": "user@example.com",
                 "mobile_no": "+234704356789021",
                 "role": "admin",
@@ -58,7 +51,7 @@ class Items(BaseModel):
     serial_no: str
     is_available: bool
     condition: str
-    
+
     class Config:
         json_schema_extra = {
             "example": {
@@ -82,19 +75,18 @@ class BorrowedItems(Items, BaseModel):
 
     class Config:
         json_schema_extra = {
-                "example": {
-                        "item_name": "itel s23",
-                        "category": "mobile phone",
-                        "model": "SCVDVBCN-234",
-                        "asset_no": "1234321",
-                        "serial_no": "dha12345678d9",
-                        "is_available": True,
-                        "condition": "Brand New",
-                        "borrowed_by": "user@example.com",
-                        "borrowed_at": "2024-01-12T15:34",
-                        "organization": "Nestle PLC",
-                        "returned": True,
-                        "returned_at": "2024-01-13T13:45",
-
-                    }
+            "example": {
+                "item_name": "itel s23",
+                "category": "mobile phone",
+                "model": "SCVDVBCN-234",
+                "asset_no": "1234321",
+                "serial_no": "dha12345678d9",
+                "is_available": True,
+                "condition": "Brand New",
+                "borrowed_by": "user@example.com",
+                "borrowed_at": "2024-01-12T15:34",
+                "organization": "Nestle PLC",
+                "returned": True,
+                "returned_at": "2024-01-13T13:45",
             }
+        }

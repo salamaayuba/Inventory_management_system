@@ -13,10 +13,10 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="singin")
 load_dotenv()
 
 CREDENTIALS_EXCEPTION = HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Invalid access token",
-        headers={"Authorization": "Bearer"},
-    )
+    status_code=status.HTTP_401_UNAUTHORIZED,
+    detail="Invalid access token",
+    headers={"Authorization": "Bearer"},
+)
 
 
 def token_payload(user: dict) -> dict:
@@ -32,13 +32,15 @@ def create_token(user: dict) -> str:
     """creates the user token"""
 
     payload = token_payload(user)
-    expire_time = datetime.utcnow() + timedelta(minutes=int(os.getenv("JWT_TIMEOUT")))
+    expire_time = datetime.utcnow() + timedelta(
+        minutes=int(os.getenv("JWT_TIMEOUT"))
+    )
     payload.update(iat=datetime.utcnow(), exp=expire_time)
     token = jwt.encode(
-            payload,
-            os.getenv("JWT_SECRET_KEY"),
-            algorithm=os.getenv("JWT_ALGORITHM"),
-        )
+        payload,
+        os.getenv("JWT_SECRET_KEY"),
+        algorithm=os.getenv("JWT_ALGORITHM"),
+    )
 
     return token
 
@@ -48,10 +50,10 @@ def decode_token(token: Annotated[str, Depends(oauth2_scheme)]) -> dict:
 
     try:
         active_user = jwt.decode(
-                token,
-                os.getenv("JWT_SECRET_KEY"),
-                os.getenv("JWT_ALGORITHM"),
-            )
+            token,
+            os.getenv("JWT_SECRET_KEY"),
+            os.getenv("JWT_ALGORITHM"),
+        )
 
     except JWTError:
         raise CREDENTIALS_EXCEPTION

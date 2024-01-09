@@ -36,7 +36,9 @@ ALLOWED_FILE_TYPES = (
 async def all_items():
     """returns all items on the platform"""
 
-    data = await db_crud.fetch_all_documents(item_collection, models.Items)
+    data = await db_crud.fetch_all_documents(
+        item_collection, models.Items
+    )
     return data
 
 
@@ -81,9 +83,7 @@ async def delete_item(serial_num: str):
     # checks from utils
     user = await db_crud.fetch_one(item_collection, serial_no=serial_num)
     if not user:
-        raise HTTPException(
-            status_code=400, detail="Invalid credentials"
-        )
+        raise HTTPException(status_code=400, detail="Invalid credentials")
 
     await db_crud.remove_one_document(
         item_collection, serial_no=serial_num
@@ -102,8 +102,8 @@ async def available_items():
 
     filter_conditions = {"is_available": {"$eq": 1}}
     documents = await db_crud.fetch_all_documents(
-            item_collection, models.Items, filter_conditions
-        )
+        item_collection, models.Items, filter_conditions
+    )
 
     return documents
 
@@ -114,19 +114,18 @@ async def borrow_item(serial_num: str, user_email: EmailStr, firm: str):
 
     document = await check_item(serial_num)
     item_meta_data = {
-            "borrowed_by": user_email,
-            "borrowed_at": datetime.utcnow(),
-            "organization": firm,
-            "returned": False,
-            }
+        "borrowed_by": user_email,
+        "borrowed_at": datetime.utcnow(),
+        "organization": firm,
+        "returned": False,
+    }
 
     document.update(item_meta_data)
-    print(document)
     await db_crud.add_single_document(borrowed_collection, document)
 
     await item_collection.find_one_and_update(
-            {"serial_no": serial_num}, {"$set": {"is_available": False}}
-        )
+        {"serial_no": serial_num}, {"$set": {"is_available": False}}
+    )
 
     return {"status": "successful"}
 
@@ -136,12 +135,13 @@ async def return_item(serial_num: str):
     """returns an items"""
 
     await borrowed_collection.find_one_and_update(
-            {"serial_no": serial_num}, {"$set": {"returned": True}}
-        )
+        {"serial_no": serial_num},
+        {"$set": {"returned": True, "returned_at": datetime.utcnow()}},
+    )
 
     await item_collection.find_one_and_update(
-            {"serial_no": serial_num}, {"$set": {"is_available": True}}
-        )
+        {"serial_no": serial_num}, {"$set": {"is_available": True}}
+    )
 
     return {"status": "successfull"}
 
@@ -149,12 +149,14 @@ async def return_item(serial_num: str):
 @router.get(
     "/borrowedItems",
     summary="returns all borrowed items",
-    #response_model=List[models.BorrowedItems],
+    # response_model=List[models.BorrowedItems],
 )
 async def all_borrowed_items():
     """returns all borrowed items"""
 
-    documents = await db_crud.fetch_all_documents(borrowed_collection, models.Items)
+    documents = await db_crud.fetch_all_documents(
+        borrowed_collection, models.Items
+    )
 
     return documents
 
@@ -181,15 +183,19 @@ async def verify_file_upload(file: UploadFile):
 async def check_item(serial_num) -> dict:
     """checks the serial number if it matches any existing document and returns it"""
 
-    document = await db_crud.fetch_one(item_collection, serial_no=serial_num)
+    document = await db_crud.fetch_one(
+        item_collection, serial_no=serial_num
+    )
     if not document:
         raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="invalid serial number")
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="invalid serial number",
+        )
 
     if document["condition"] != "good" or not document["is_available"]:
         raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="item not available for use")
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="item not available for use",
+        )
 
     return document

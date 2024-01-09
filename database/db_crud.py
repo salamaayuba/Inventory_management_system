@@ -24,7 +24,9 @@ async def add_multiple_documents(collection, doc_array):
     return result
 
 
-async def fetch_all_documents(collection, collection_object, doc_filters=None):
+async def fetch_all_documents(
+    collection, collection_object, doc_filters=None
+):
     """returns all documents on the mongoDB collection
 
     @collection: the mongoDB collection
@@ -38,7 +40,6 @@ async def fetch_all_documents(collection, collection_object, doc_filters=None):
     else:
         documents = collection.find()
 
-
     return [collection_object(**document) async for document in documents]
 
 
@@ -47,8 +48,9 @@ async def fetch_one(collection, **kwargs):
 
     if not kwargs:
         raise HTTPException(
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                detail="no filter condition passed")
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="no filter condition passed",
+        )
 
     result = await collection.find_one(kwargs)
     return result
@@ -59,8 +61,9 @@ async def remove_one_document(collection, **kwargs):
 
     if not kwargs:
         raise HTTPException(
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                detail="no filter condition passed")
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="no filter condition passed",
+        )
 
     await collection.delete_one(kwargs)
     return True

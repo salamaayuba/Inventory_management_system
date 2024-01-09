@@ -4,7 +4,8 @@ By leveraging Python's versatility and extensive libraries, this Inventory Manag
 
 # Getting started
 
-- set your `.env` file at the root of the repository
+- Clone the repository and `cd` into the root of the repository
+- Set your `.env` file at the root of the repository
 ```bash
 JWT_SECRET_KEY = "ENTER YOUR VALUE HERE"
 JWT_ALGORITHM = "ENTER YOUR VALUE HERE"
@@ -45,3 +46,4 @@ python3 main.py
 # running the start.sh
 ./start.sh
 ```
+> in production environment, uncomment the __uds keyword argument__to the `uvicorn.run()` on the main.py 

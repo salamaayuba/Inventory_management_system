@@ -9,6 +9,7 @@ app.include_router(auth.router)
 app.include_router(users.router)
 app.include_router(items.router)
 
+
 @app.get("/")
 async def index():
     return {
@@ -24,5 +25,5 @@ if __name__ == "__main__":
         host="0.0.0.0",
         port=5000,
         reload=True,
-        #uds="/tmp/uvicorn.sock",
+        # uds="/tmp/uvicorn.sock",
     )

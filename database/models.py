@@ -17,8 +17,8 @@ class UserData(BaseModel):
         json_schema_extra = {
             "example": {
                 "name": "salama ayuba",
-                "email": "user@example.com",
-                "mobile_no": "+234704356789021",
+                "email": "salamaayuba111@gmail.com",
+                "mobile_no": "+2348136342967",
                 "role": "admin",
                 "department": "art",
             }
@@ -34,8 +34,8 @@ class Users(UserData, BaseModel):
         json_schema_extra = {
             "example": {
                 "name": "salama ayuba",
-                "email": "user@example.com",
-                "mobile_no": "+234704356789021",
+                "email": "salamaayuba111@gmail.com",
+                "mobile_no": "+2348136342967",
                 "role": "admin",
                 "department": "art",
                 "password": "your_Password_Here",
